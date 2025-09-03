@@ -1,0 +1,71 @@
+import jwt from "jsonwebtoken"
+import mongoose from "mongoose"
+
+const userSchema = new mongoose.Schema({
+    name:{
+        type : String,
+        required : true
+    },
+    email:{
+        type:true,
+        required:true,
+        unique : true,
+        lowercase : true,
+        trim : true
+    },
+    password : {
+        type : String,
+        required : true
+    },
+    dpLocalPath : {
+        type : String,
+        required : true
+    },
+    saves : {
+        type : Array
+    },
+    isActive : {
+        type: Boolean,
+        required : false,
+        default: true
+    },
+    refreshToken : {
+        type : String
+    },
+    accessToken : {
+        type : String
+    }
+}, {
+    timestamps : true
+})
+
+userSchema.pre('save' , async function (next) {
+    if(this.isModified('password')){
+        this.password = await bcrypt.hash(this.password , 10)
+    }
+    next()
+})
+
+userSchema.methods.isPassCorrect = async function (password) {
+    return bcrypt.compare(password , this.password)    
+}
+
+userSchema.methods.generateAccessToken = function () {
+    return jwt.sign({
+        _id : this._id,
+        email : this.email
+    } , process.env.ACCESS_TOKEN_KEY , {
+        expiresIn : process.env.ACCESS_TOKEN_EXPIRY
+    })
+}
+
+userSchema.methods.generateRefreshToken = function () {
+    return jwt.sign({
+        _id : this._id,
+        email : this.email
+    } , process.env.ACCESS_REFRESH_KEY , {
+        expiresIn : process.env.ACCESS_REFRESH_EXPIRY
+    })
+}
+
+export const User = mongoose.model('User' , userSchema)
