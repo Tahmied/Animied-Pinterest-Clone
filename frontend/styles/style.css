@@ -155,6 +155,7 @@
      background-color: var(--accent);
      color: white;
 }
+/* Masonry Grid Styles */
  .pin-container {
      column-count: 1;
      column-gap: 20px;
@@ -170,26 +171,16 @@
      transition: var(--transition);
      position: relative;
      cursor: pointer;
+     animation: fadeIn 0.5s ease-out;
 }
  .pin:hover {
      transform: translateY(-8px);
      background-color: var(--bg-card-hover);
      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
- .pin-image-container {
-     position: relative;
-     overflow: hidden;
-     width: 100%;
-     padding-top: 150%;
-    /* 2:3 aspect ratio */
-}
  .pin-image {
-     position: absolute;
-     top: 0;
-     left: 0;
      width: 100%;
-     height: 100%;
-     object-fit: cover;
+     display: block;
      transition: var(--transition);
 }
  .pin:hover .pin-image {
@@ -381,9 +372,6 @@
          opacity: 1;
          transform: translateY(0);
     }
-}
- .pin {
-     animation: fadeIn 0.5s ease-out;
 }
 /* Custom scrollbar */
  ::-webkit-scrollbar {
