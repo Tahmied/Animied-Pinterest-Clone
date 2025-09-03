@@ -1,0 +1,30 @@
+{
+  "name": "animied",
+  "version": "1.0.0",
+  "description": "a image sharing platform like pinterest",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "tahmied",
+    "annie",
+    "animied",
+    "pinterest",
+    "instagram",
+    "social",
+    "platform"
+  ],
+  "author": "tahmied",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.0",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
