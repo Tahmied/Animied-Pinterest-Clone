@@ -82,9 +82,35 @@ export const loginUser = asyncHandler(async (req,res)=>{
 
     return res.status(200)
     .cookie('AccessToken' , accessToken, cookieOptions)
-    .cookie('refreshToken' , refreshToken, cookieOptions)
+    .cookie('RefreshToken' , refreshToken, cookieOptions)
     .json(
         new ApiResponse(200 , [] ,'user logged in')
     )
 
+})
+
+export const refreshToken = asyncHandler(async (req , res) => {
+    // find the current user based on current refresh token
+    let user = req.user
+    if(!user){
+        throw new ApiError(400 , 'unable to find the user to refresh token')
+    }
+    // generate new access and refresh token
+    let {accessToken , refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
+    if(!accessToken || !refreshToken) {
+        throw new ApiError(500 , 'unable to generate access and refresh token for user to refresh the tokens')
+    }
+
+    // set the new access and refresh token to cookies
+    let cookieOptions = {
+        httpOnly : true,
+        secure : process.env.NODE_ENV === 'production',
+        sameSite : 'strict'
+    }
+    
+    if(accessToken || refreshToken){
+        return res.status(200)
+        .cookie("AccessToken", accessToken, cookieOptions)
+        .cookie("RefreshToken", refreshToken, cookieOptions)
+    }
 })
