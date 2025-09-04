@@ -129,3 +129,27 @@ export const checkLogin = asyncHandler(async (req,res)=>{
         new ApiResponse(200 , {isLoggedIn : true}, 'user is logged in')
     )
 })
+
+export const logOut = asyncHandler(async (req,res)=>{
+    let user = req.user
+    if(!user){
+        throw new ApiError( 404 ,`user not found to logout`)
+    }
+
+    user.accessToken = null
+    user.refreshToken = null
+    await user.save()
+
+    let cookieOptions = {
+        httpOnly : true,
+        secure : process.env.NODE_ENV === 'production',
+        sameSite : 'strict'
+    }
+
+    return res.status(200)
+    .clearCookie('AccessToken', cookieOptions)
+    .clearCookie('RefreshToken', cookieOptions)
+    .json(
+        new ApiResponse(200 , null , 'user logged out sucksexfully')
+    )
+})
