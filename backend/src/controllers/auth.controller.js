@@ -107,10 +107,25 @@ export const refreshToken = asyncHandler(async (req , res) => {
         secure : process.env.NODE_ENV === 'production',
         sameSite : 'strict'
     }
-    
+
     if(accessToken || refreshToken){
         return res.status(200)
         .cookie("AccessToken", accessToken, cookieOptions)
         .cookie("RefreshToken", refreshToken, cookieOptions)
+        .json(
+            new ApiResponse(200, null , 'tokens refreshed')
+        )
     }
+})
+
+export const checkLogin = asyncHandler(async (req,res)=>{
+    let user = req.user
+    if(!user){
+        return res.status(200).json(
+            new ApiResponse(200 , {isLoggedIn : false}, 'user is not logged in')
+        )
+    }
+    return res.status(200).json(
+        new ApiResponse(200 , {isLoggedIn : true}, 'user is logged in')
+    )
 })
