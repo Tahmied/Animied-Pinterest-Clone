@@ -10,8 +10,10 @@ app.use(cookieParser())
 app.use(express.static('public'))
 
 import authRoutes from './routes/auth.routes.js'
+import pinRoutes from './routes/pin.routes.js'
 
 app.use('/api/v1/users' , authRoutes)
+app.use('/api/v1/pins' , pinRoutes)
 
 
 export { app }
