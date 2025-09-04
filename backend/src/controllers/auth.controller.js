@@ -9,6 +9,26 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+async function generateAccessTokenAndRefreshToken(userId){
+    let user = await User.findById(userId)
+    if(!user){
+        throw new ApiError(500 , 'unable to find the user to generate tokens')
+    }
+
+    let accessToken = user.generateAccessToken()
+    let refreshToken = user.generateRefreshToken()
+
+    if(!accessToken || !refreshToken) {
+        throw new ApiError(500 , 'unable to generate access and refresh token for user')
+    }
+
+    user.accessToken = accessToken
+    user.refreshToken = refreshToken
+    await user.save({validateBeforeSave : false})
+
+    return { "accessToken" :  accessToken , "refreshToken" : refreshToken}
+}
+
 export const registerUser = asyncHandler(async (req , res) => {
     let {name , email, password} = req.body
     if([name,email,password].some((e)=>!e)){
@@ -35,4 +55,36 @@ export const registerUser = asyncHandler(async (req , res) => {
         }
         throw new ApiError(500 , `couldn't register the user due to ${error}`)
         }
+})
+
+export const loginUser = asyncHandler(async (req,res)=>{
+    let {email , password} = req.body
+    if(!email || !password){
+        throw new ApiError(400 , 'email and password are required')
+    }
+    
+    let user = await User.findOne({email : email})
+    if(!user){
+        throw new ApiError(404 , `user not found`)
+    }
+
+    let {accessToken , refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
+
+    if(!accessToken || !refreshToken) {
+        throw new ApiError(500 , 'unable to login due to not found access and refresh token for user')
+    }
+
+    let cookieOptions = {
+        httpOnly : true,
+        secure : process.env.NODE_ENV === 'production',
+        sameSite : 'strict'
+    }
+
+    return res.status(200)
+    .cookie('AccessToken' , accessToken, cookieOptions)
+    .cookie('refreshToken' , refreshToken, cookieOptions)
+    .json(
+        new ApiResponse(200 , [] ,'user logged in')
+    )
+
 })
