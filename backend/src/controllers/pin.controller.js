@@ -26,3 +26,31 @@ export const createPin = asyncHandler (async (req,res) => {
         throw new ApiError(500 , 'unable to create a pin')
     }
 })
+
+export const getPins = asyncHandler (async (req,res)=>{
+    let page = parseInt(req.query.page) 
+    let limit = parseInt(req.query.limit)
+    
+    if(!page){
+        page = 1
+    }
+    if(!limit){
+        limit = 10
+    }
+
+    let skip = (page - 1) * limit
+
+    let pins = await Pin.find().sort({createdAt:-1}).skip(skip).limit(limit)
+    
+
+    let totalPins = await Pin.countDocuments()
+    let totalPages = Math.ceil(totalPins/limit)
+
+    res.status(200)
+    .json(
+        new ApiResponse(200 , {
+            page , limit, totalPins, totalPages , pins 
+        })
+    )
+
+})
