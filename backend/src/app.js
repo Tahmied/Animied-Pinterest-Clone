@@ -9,5 +9,9 @@ app.use(express.urlencoded({extended : true , limit : '16kb'}))
 app.use(cookieParser())
 app.use(express.static('public'))
 
+import authRoutes from './routes/auth.routes.js'
+
+app.use('/api/v1/users' , authRoutes)
+
 
 export { app }

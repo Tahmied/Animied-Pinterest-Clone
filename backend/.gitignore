@@ -116,4 +116,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-.ds_store
+
+public/uploads/dp/*
+!public/uploads/dp/.gitkeep
+
+public/uploads/pins/*
+!public/uploads/pins/.gitkeep
+.DS_Store
