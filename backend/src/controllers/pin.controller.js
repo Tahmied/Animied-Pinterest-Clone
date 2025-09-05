@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 
 export const createPin = asyncHandler (async (req,res) => {
-    let {title} = req.body
+    let {title,tag} = req.body
     let user = req.user
     let imagePath = req.file ? `/pins/${req.file.filename}` : null
     if(!imagePath){
@@ -14,7 +14,7 @@ export const createPin = asyncHandler (async (req,res) => {
     try {
         await Pin.create(
             {
-                title , imagePath, publishedBy : user._id
+                title, tag , imagePath, publishedBy : user._id
             }
         )
         let publishedpIn = await Pin.findOne({imagePath : imagePath})
