@@ -18,6 +18,17 @@ async function checkLogin() {
     }
 }
 
+function waitForImages(images) {
+    return Promise.all(
+        Array.from(images).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => {
+                img.onload = img.onerror = resolve;
+            });
+        })
+    );
+}
+
 // pins
 let AllPins = []
 let currentPage = 1;
@@ -26,6 +37,19 @@ let maxPages;
 let loading = false;
 const loadingAnimation = document.querySelector('.dots-container')
 
+let senitel = document.querySelector('#load-more')
+let observer = new IntersectionObserver((entries)=>{
+    if(entries[0].isIntersecting){
+        console.log(`end of the screen, loading more..`)
+        loadMore()
+    }
+} , {
+    root : null,
+    rootMargin : '200px',
+    threshold : 0
+})
+
+// loads initial pins and returns it
 async function getInitialPins(page = 1, limit = 10) {
     let res = await fetch(`/api/v1/pins/pins?page=${page}&limit=${limit}`)
     let data = await res.json()
@@ -47,6 +71,9 @@ async function loadMore(page, limit) {
     // check the page limit
     if(currentPage>maxPages) {
         console.log(`fetching ${currentPage} and total limit is ${maxPages}`)
+        
+        observer.unobserve(senitel)
+        loading = false
         return
     }
     console.log(`fetching ${currentPage} and total limit is ${maxPages}`)
@@ -77,6 +104,9 @@ async function loadMore(page, limit) {
 
     // everythings done hide the loading and make the loading false
     currentPage++
+    let newImages = pinContainer.querySelectorAll('.pin img')
+    await waitForImages(newImages)
+    observer.observe(senitel)
     loadingAnimation.style.display = 'none'
     loading = false
 }
@@ -102,6 +132,9 @@ async function generatePins() {
 
         pinContainer.appendChild(pinElement);
     });
+    let newImages = pinContainer.querySelectorAll('.pin img')
+    await waitForImages(newImages)
+    observer.observe(senitel)
     loadingAnimation.style.display = 'none'
 }
 
