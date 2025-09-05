@@ -158,3 +158,7 @@ export const logOut = asyncHandler(async (req,res)=>{
         new ApiResponse(200 , null , 'user logged out sucksexfully')
     )
 })
+
+export const userProfile = asyncHandler(async (req,res) => {
+    
+})

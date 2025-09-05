@@ -84,7 +84,7 @@ export const GetUserPins = asyncHandler(async (req, res) => {
   return res.status(200).json(
     new ApiResponse(
       200,
-      { page, limit, total, totalPages, items: userPins },
+      { page, limit, total, totalPages, pins: userPins },
       "Pins fetched successfully"
     )
   );
