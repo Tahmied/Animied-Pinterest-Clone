@@ -1,3 +1,31 @@
+const uploadBtn = document.getElementById('upload-btn');
+const modal = document.getElementById('upload-modal');
+const closeModal = document.getElementById('close-modal');
+const pinTitle = document.querySelector('.pin-title')
+const pinTag = document.querySelector('.pin-desc')
+const uploadArea = document.querySelector(".upload-area");
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const publishBtn = document.querySelector('.publish-btn')
+const loadingAnimation = document.querySelector('.dots-container')
+let senitel = document.querySelector('#load-more')
+let selectedFile = null
+let AllPins = []
+let currentPage = 1;
+let currentLimit = 10;
+let maxPages;
+let loading = false;
+let observer = new IntersectionObserver((entries)=>{
+    if(entries[0].isIntersecting){
+        loadMore()
+    }
+    } , {
+    root : null,
+    rootMargin : '200px',
+    threshold : 0
+})
+
+
 // check login
 async function checkLogin() {
     let res = await fetch('/api/v1/users/checkLogin')
@@ -27,24 +55,22 @@ function waitForImages(images) {
     );
 }
 
-// pins
-let AllPins = []
-let currentPage = 1;
-let currentLimit = 10;
-let maxPages;
-let loading = false;
-const loadingAnimation = document.querySelector('.dots-container')
-
-let senitel = document.querySelector('#load-more')
-let observer = new IntersectionObserver((entries)=>{
-    if(entries[0].isIntersecting){
-        loadMore()
-    }
-} , {
-    root : null,
-    rootMargin : '200px',
-    threshold : 0
-})
+// show toast
+function showToast(message , desc){
+    let toastContainer = document.querySelector('.toast')
+    let toastMessaage = document.querySelector('.toast-message-text')
+    let toastDesc = document.querySelector('.toast-sub-text')
+    
+    toastContainer.style.display = "flex"
+    toastMessaage.innerHTML = message
+    toastDesc.innerHTML = desc
+    setTimeout(()=>{
+        toastContainer.style.display = "none"
+    },3000)
+    document.querySelector('.toast-cross-icon').addEventListener('click' , (e)=>{
+        toastContainer.style.display = "none"
+    })
+}
 
 // loads initial pins and returns it
 async function getInitialPins(page = 1, limit = 10) {
@@ -137,7 +163,7 @@ async function generatePins() {
     loadingAnimation.style.display = 'none'
 }
 
-async function uploadPin(image, title = '', tag = '') {
+async function uploadPin(image, title = ' ', tag = ' ') {
 
     let formData = new FormData()
 
@@ -159,16 +185,6 @@ async function uploadPin(image, title = '', tag = '') {
 }
 
 // Modal functionality
-const uploadBtn = document.getElementById('upload-btn');
-const modal = document.getElementById('upload-modal');
-const closeModal = document.getElementById('close-modal');
-const pinTitle = document.querySelector('.pin-title')
-const pinTag = document.querySelector('.pin-desc')
-const uploadArea = document.querySelector(".upload-area");
-const fileInput = document.getElementById("fileInput");
-const preview = document.getElementById("preview");
-const publishBtn = document.querySelector('.publish-btn')
-let selectedFile = null
 
 uploadBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -204,7 +220,7 @@ fileInput.addEventListener('change' , (e)=>{
 
 publishBtn.addEventListener('click' , async (e)=>{
     e.preventDefault()
-    publishBtn.disabled.true
+    publishBtn.disabled = true
     await uploadPin(selectedFile , pinTitle.value, pinTag.value)
     if(uploadPin){
         const pinContainer = document.getElementById('pin-container');
@@ -217,7 +233,9 @@ publishBtn.addEventListener('click' , async (e)=>{
         await waitForImages(newImages)
         loadingAnimation.style.display = 'none'
         observer.observe(senitel)
+        showToast('Pin uploaded' , 'Your pin is uploaded successfully')
     }
+    publishBtn.disabled = false;
     if(!uploadPin){
         alert('failed to upload')
     }
