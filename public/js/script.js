@@ -207,14 +207,20 @@ publishBtn.addEventListener('click' , async (e)=>{
     publishBtn.disabled.true
     await uploadPin(selectedFile , pinTitle.value, pinTag.value)
     if(uploadPin){
+        const pinContainer = document.getElementById('pin-container');
+        observer.unobserve(senitel)
+        loadingAnimation.style.display = 'flex'
+        pinContainer.innerHTML = '';
+        modal.style.display = 'none';
         await generatePins()
+        let newImages = pinContainer.querySelectorAll('.pin img')
+        await waitForImages(newImages)
+        loadingAnimation.style.display = 'none'
+        observer.observe(senitel)
     }
     if(!uploadPin){
         alert('failed to upload')
     }
-    setTimeout(()=>{
-        modal.style.display = 'none';
-    } , 1000)
 })
 
 // Initialize pins on page load
