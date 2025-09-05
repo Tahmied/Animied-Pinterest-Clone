@@ -93,9 +93,9 @@ async function loadMore(page, limit) {
 
         pinElement.innerHTML = `
                     <img src="${newPin.imagePath}" loading="lazy" alt="${newPin.title}" class="pin-image">
+                    <button class="save-btn">Save</button>
                     <div class="pin-overlay">
                         <h3 class="pin-title">${newPin.title}</h3>
-                        <button class="save-btn">Save</button>
                     </div>
                 `;
 
@@ -124,9 +124,9 @@ async function generatePins() {
 
         pinElement.innerHTML = `
                     <img src="${pin.imagePath}" loading="lazy" alt="${pin.title}" class="pin-image">
+                    <button class="save-btn">Save</button>
                     <div class="pin-overlay">
                         <h3 class="pin-title">${pin.title}</h3>
-                        <button class="save-btn">Save</button>
                     </div>
                 `;
 
