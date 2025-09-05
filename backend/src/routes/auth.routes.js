@@ -6,7 +6,7 @@ import { mediaUpload } from '../middleware/multer.middleware.js'
 const router = Router()
 
 router.post('/register' , mediaUpload('/dp').single('dp'), registerUser)
-router.get('/login' , loginUser)
+router.post('/login' , loginUser)
 router.get('/refreshToken', findUser, refreshToken)
 router.get('/checkLogin', findUser, checkLogin)
 router.get('/logout', findUser, logOut)

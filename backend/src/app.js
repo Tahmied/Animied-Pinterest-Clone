@@ -1,6 +1,7 @@
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
+import { errorHandler } from './middleware/errorHandler.middleware.js'
 
 const app = express()
 app.use(cors({origin : process.env.ORIGIN}))
@@ -15,5 +16,5 @@ import pinRoutes from './routes/pin.routes.js'
 app.use('/api/v1/users' , authRoutes)
 app.use('/api/v1/pins' , pinRoutes)
 
-
+app.use(errorHandler)
 export { app }

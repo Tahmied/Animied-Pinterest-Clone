@@ -65,7 +65,12 @@ export const loginUser = asyncHandler(async (req,res)=>{
     
     let user = await User.findOne({email : email})
     if(!user){
-        throw new ApiError(404 , `user not found`)
+        throw new ApiError(404 , `No User found with this email`)
+    }
+
+    let checkPass = await user.isPassCorrect(password)
+    if(!checkPass){
+        throw new ApiError(400 , 'wrong password')
     }
 
     let {accessToken , refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
