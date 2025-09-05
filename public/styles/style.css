@@ -485,7 +485,7 @@
 .toast-icon {
   width: 17px;
   height: 17px;
-  color: #d10d0d;
+  color: #0bb7f0;
 }
 .toast-message-text-container {
   display: flex;
@@ -500,7 +500,7 @@
   cursor: default;
 }
 .toast-message-text {
-  color: #d10d0d;
+  color: #0bb7f0;
   font-size: 14px;
   font-weight: 700;
 }
