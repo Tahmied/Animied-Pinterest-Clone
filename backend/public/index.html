@@ -76,7 +76,7 @@
             let res = await fetch('/api/v1/users/checkLogin')
             let data = await res.json()
             if(data.success == false){
-                //try to refresh the tokens
+                // if not logged in try to refresh the tokens
                 let response = await fetch('/api/v1/users/refreshToken')
                 let receievedData = await response.json()
                 if(receievedData.success == false){
@@ -92,35 +92,32 @@
         }
 
         // pins
-        const pins = [
-            { id: 1, title: "Minimalist Living Room Design with Dark Tones", image: "https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 2, title: "Delicious Chocolate Cake Recipe for Special Occasions", image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 3, title: "Mountain Landscape Photography Tips and Techniques", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 4, title: "DIY Home Office Setup for Remote Workers", image: "https://images.unsplash.com/photo-1495465798138-718f86d1a4f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 5, title: "Beach Vacation Ideas for Your Next Trip", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 6, title: "Abstract Art Inspiration from Modern Artists", image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"},
-            { id: 7, title: "Summer Fashion Trends for 2023", image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 8, title: "Healthy Breakfast Options to Start Your Day", image: "https://images.unsplash.com/photo-1555126634-323283e090fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 9, title: "Minimalist Bedroom Design with Calming Colors", image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"},
-            { id: 10, title: "Nature Photography Tips for Amateurs", image: "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 11, title: "DIY Home Decor Projects for Beginners", image: "https://images.unsplash.com/photo-1540946485067-9537a9c6ead2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"},
-            { id: 12, title: "Travel Destinations Bucket List for Adventurers", image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"},
-            { id: 13, title: "Creative Wall Art Ideas for Your Home", image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" },
-            { id: 14, title: "Gourmet Cooking Techniques from Top Chefs", image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"},
-            { id: 15, title: "Urban Street Style Fashion for Everyday Wear", image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"}
-        ];
+
+        async function getPins(page,limit) {
+            let res = await fetch(`/api/v1/pins/pins?page=${page}&limit=${limit}`)
+            let data = await res.json()
+            return data.data
+        }
+
+        let AllPins = []
 
         // Function to generate pin elements with proper masonry layout
-        function generatePins() {
+        async function generatePins() {
+            let pinsRes = await getPins(1,10)
+            let pins = pinsRes.pins
+            pins.forEach((pin)=>{
+                AllPins.push(pin)
+            })
+            
             const pinContainer = document.getElementById('pin-container');
             pinContainer.innerHTML = '';
             
-            pins.forEach(pin => {
+            AllPins.forEach(pin => {
                 const pinElement = document.createElement('div');
                 pinElement.className = 'pin';
                 
                 pinElement.innerHTML = `
-                    <img src="${pin.image}" alt="${pin.title}" class="pin-image">
+                    <img src="${pin.imagePath}" alt="${pin.title}" class="pin-image">
                     <div class="pin-overlay">
                         <h3 class="pin-title">${pin.title}</h3>
                         <button class="save-btn">Save</button>

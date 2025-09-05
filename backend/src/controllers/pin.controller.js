@@ -7,7 +7,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 export const createPin = asyncHandler (async (req,res) => {
     let {title,tag} = req.body
     let user = req.user
-    let imagePath = req.file ? `/pins/${req.file.filename}` : null
+    let imagePath = req.file ? `/uploads/pins/${req.file.filename}` : null
     if(!imagePath){
         throw new ApiError(400 , 'Image path is a reuired field')
     }
