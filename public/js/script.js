@@ -122,10 +122,10 @@ async function generatePins() {
         pinElement.className = 'pin';
 
         pinElement.innerHTML = `
-                    <img src="${pin.imagePath}" loading="lazy" alt="${pin.title}" class="pin-image">
+                    <img src="${pin.imagePath}" loading="lazy" alt="${pin.title ? pin.title : ''}" class="pin-image">
                     <button class="save-btn">Save</button>
                     <div class="pin-overlay">
-                        <h3 class="pin-title">${pin.title}</h3>
+                        <h3 class="pin-title">${pin.title ? pin.title : ''}</h3>
                     </div>
                 `;
 
@@ -137,10 +137,38 @@ async function generatePins() {
     loadingAnimation.style.display = 'none'
 }
 
+async function uploadPin(image, title = '', tag = '') {
+
+    let formData = new FormData()
+
+    formData.append('pin' , image)
+    if(title) {formData.append('title', title)}
+    if(tag){formData.append('tag' ,tag)}
+
+    let res = await fetch('/api/v1/pins/publish-pin' , {
+        method : 'POST',
+        body : formData
+    })
+    let data = await res.json()
+    console.log(data)
+    if(data.data.success = true){
+        return true
+    } else {
+        return false
+    }
+}
+
 // Modal functionality
 const uploadBtn = document.getElementById('upload-btn');
 const modal = document.getElementById('upload-modal');
 const closeModal = document.getElementById('close-modal');
+const pinTitle = document.querySelector('.pin-title')
+const pinTag = document.querySelector('.pin-desc')
+const uploadArea = document.querySelector(".upload-area");
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const publishBtn = document.querySelector('.publish-btn')
+let selectedFile = null
 
 uploadBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -156,6 +184,38 @@ window.addEventListener('click', (e) => {
         modal.style.display = 'none';
     }
 });
+
+uploadArea.addEventListener('click' , (e)=>{
+    fileInput.click()
+})
+
+fileInput.addEventListener('change' , (e)=>{
+    const file = fileInput.files[0]
+    if(file){
+        selectedFile = file
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+})
+
+publishBtn.addEventListener('click' , async (e)=>{
+    e.preventDefault()
+    publishBtn.disabled.true
+    await uploadPin(selectedFile , pinTitle.value, pinTag.value)
+    if(uploadPin){
+        await generatePins()
+    }
+    if(!uploadPin){
+        alert('failed to upload')
+    }
+    setTimeout(()=>{
+        modal.style.display = 'none';
+    } , 1000)
+})
 
 // Initialize pins on page load
 document.addEventListener('DOMContentLoaded', () => {

@@ -73,10 +73,14 @@
             <div class="upload-area">
                 <i class="fas fa-cloud-upload-alt"></i>
                 <p>Drag and drop your image here or click to browse</p>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <img id="preview" style="display: none; border-radius: 12px; margin: 1rem auto; max-width: 200px; max-height: 140px;">
             </div>
-            <input type="text" placeholder="Add a title" style="width: 100%; padding: 14px; margin-bottom: 16px; border-radius: 8px; border: none; background-color: rgba(255, 255, 255, 0.08); color: var(--text-primary);">
-            <textarea placeholder="Add a description" style="width: 100%; padding: 14px; margin-bottom: 16px; border-radius: 8px; border: none; height: 100px; resize: none; background-color: rgba(255, 255, 255, 0.08); color: var(--text-primary);"></textarea>
-            <button style="background-color: var(--accent); color: white; border: none; padding: 14px 20px; border-radius: 24px; width: 100%; font-weight: bold; cursor: pointer; transition: var(--transition);" onmouseover="this.style.backgroundColor='var(--accent-hover)'" onmouseout="this.style.backgroundColor='var(--accent)'">Publish</button>
+
+            <input class='pin-title' type="text" placeholder="Add a title" style="width: 100%; padding: 14px; margin-bottom: 16px; border-radius: 8px; border: none; background-color: rgba(255, 255, 255, 0.08); color: var(--text-primary);">
+            <textarea class="pin-desc" placeholder="Add a description" style="width: 100%; padding: 14px; margin-bottom: 16px; border-radius: 8px; border: none; height: 100px; resize: none; background-color: rgba(255, 255, 255, 0.08); color: var(--text-primary);"></textarea>
+
+            <button class="publish-btn" style="background-color: var(--accent); color: white; border: none; padding: 14px 20px; border-radius: 24px; width: 100%; font-weight: bold; cursor: pointer; transition: var(--transition);" onmouseover="this.style.backgroundColor='var(--accent-hover)'" onmouseout="this.style.backgroundColor='var(--accent)'">Publish</button>
         </div>
     </div>
 
