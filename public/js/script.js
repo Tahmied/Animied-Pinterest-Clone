@@ -8,13 +8,11 @@ async function checkLogin() {
         let receievedData = await response.json()
         if (receievedData.success == false) {
             // if tokens can't be refreshed redirect to login page
-            console.log('user not logged in')
             window.location.href = './login.html'
         } else {
             console.log(`tokens refreshsed`)
         }
     } else {
-        console.log(`user authenticated`)
     }
 }
 
@@ -40,7 +38,6 @@ const loadingAnimation = document.querySelector('.dots-container')
 let senitel = document.querySelector('#load-more')
 let observer = new IntersectionObserver((entries)=>{
     if(entries[0].isIntersecting){
-        console.log(`end of the screen, loading more..`)
         loadMore()
     }
 } , {
@@ -70,13 +67,11 @@ async function loadMore(page, limit) {
 
     // check the page limit
     if(currentPage>maxPages) {
-        console.log(`fetching ${currentPage} and total limit is ${maxPages}`)
-        
+        // console.log(`fetching ${currentPage} and total limit is ${maxPages}`)
         observer.unobserve(senitel)
         loading = false
         return
     }
-    console.log(`fetching ${currentPage} and total limit is ${maxPages}`)
 
     // not its loading, show the loading animation
     loadingAnimation.style.display = 'flex'
@@ -86,8 +81,12 @@ async function loadMore(page, limit) {
     let data = await res.json()
 
     let newPins = data.data.pins
+
     const pinContainer = document.getElementById('pin-container');
     newPins.forEach((newPin) => {
+
+        AllPins.push(newPin)
+
         const pinElement = document.createElement('div');
         pinElement.className = 'pin';
 
