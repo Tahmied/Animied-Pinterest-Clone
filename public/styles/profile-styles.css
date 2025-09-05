@@ -431,3 +431,129 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent);
         }
+
+.toast {
+  width: 330px;
+  height: 80px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 10px 15px;
+  background-color: #ffffff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  position: relative;
+  overflow: hidden;
+  display: none;
+  align-items: center;
+  justify-content: space-around;
+  gap: 15px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 99999999999999;
+}
+.wave {
+  position: absolute;
+  transform: rotate(90deg);
+  left: -31px;
+  top: 32px;
+  width: 80px;
+  fill: #fc0c0c3a;
+}
+.toast-icon-container {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fc0c0c48;
+  border-radius: 50%;
+  margin-left: 8px;
+}
+.toast-icon {
+  width: 17px;
+  height: 17px;
+  color: #0bb7f0;
+}
+.toast-message-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex-grow: 1;
+}
+.toast-message-text,
+.toast-sub-text {
+  margin: 0;
+  cursor: default;
+}
+.toast-message-text {
+  color: #0bb7f0;
+  font-size: 14px;
+  font-weight: 700;
+}
+.toast-sub-text {
+  font-size: 14px;
+  color: #555;
+}
+.toast-cross-icon {
+  width: 18px;
+  height: 18px;
+  color: #555;
+  cursor: pointer;
+}
+
+/* Upload Modal */
+ .modal {
+     display: none;
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.8);
+     z-index: 2000;
+     align-items: center;
+     justify-content: center;
+     backdrop-filter: blur(5px);
+}
+ .modal-content {
+     background-color: var(--bg-card);
+     border-radius: 20px;
+     width: 90%;
+     max-width: 500px;
+     padding: 24px;
+     position: relative;
+     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+ .close-modal {
+     position: absolute;
+     top: 20px;
+     right: 20px;
+     font-size: 24px;
+     cursor: pointer;
+     color: var(--text-secondary);
+     transition: var(--transition);
+}
+ .close-modal:hover {
+     color: var(--text-primary);
+}
+ .upload-area {
+     border: 2px dashed rgba(255, 255, 255, 0.2);
+     border-radius: 12px;
+     padding: 40px 20px;
+     text-align: center;
+     margin: 20px 0;
+     cursor: pointer;
+     transition: var(--transition);
+}
+ .upload-area:hover {
+     border-color: var(--accent);
+}
+ .upload-area i {
+     font-size: 48px;
+     color: var(--accent);
+     margin-bottom: 15px;
+}
+ .upload-area p {
+     color: var(--text-secondary);
+}

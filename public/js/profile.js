@@ -62,7 +62,7 @@ function waitForImages(images) {
 async function getInitialPins(page = 1, limit = 10) {
     let res = await fetch(`/api/v1/pins/userPins?page=${page}&limit=${limit}`)
     let data = await res.json()
-    console.log(`pax pages ${maxPages}`)
+    maxPages = data.data.totalPages
     let pins = data.data.pins
     pins.forEach((pin) => {
         AllPins.push(pin)
@@ -80,7 +80,7 @@ async function loadMore(page, limit) {
 
     // check the page limit
     if(currentPage>maxPages) {
-        // console.log(`fetching ${currentPage} and total limit is ${maxPages}`)
+        console.log(`fetching ${currentPage} and total limit is ${maxPages}`)
         observer.unobserve(senitel)
         loading = false
         return
@@ -150,26 +150,43 @@ async function generatePins() {
     loadingAnimation.style.display = 'none'
 }
 
+// Modal functionality
+
+uploadBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    modal.style.display = 'flex';
+});
+
+closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+uploadArea.addEventListener('click' , (e)=>{
+    fileInput.click()
+})
+
+fileInput.addEventListener('change' , (e)=>{
+    const file = fileInput.files[0]
+    if(file){
+        selectedFile = file
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+})
 
 
 // Initialize pins on page load
 document.addEventListener('DOMContentLoaded', () => {
     generatePins();
     checkLogin()
-
-    // Add active class to clicked category
-    const categories = document.querySelectorAll('.category');
-    categories.forEach(category => {
-        category.addEventListener('click', () => {
-            categories.forEach(c => c.classList.remove('active'));
-            category.classList.add('active');
-        });
-    });
-
-    // Make categories scrollable with mouse wheel
-    const categoriesContainer = document.querySelector('.categories');
-    categoriesContainer.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        categoriesContainer.scrollLeft += e.deltaY;
-    });
 });
