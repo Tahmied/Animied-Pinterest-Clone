@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Pin } from '../models/pin.model.js';
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
@@ -54,3 +55,37 @@ export const getPins = asyncHandler (async (req,res)=>{
     )
 
 })
+
+export const GetUserPins = asyncHandler(async (req, res) => {
+  const user = req.user;
+  if (!user) throw new ApiError(400, "user is a required field");
+
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.max(1, Math.min(100, parseInt(req.query.limit, 10) || 10));
+  const skip = (page - 1) * limit;
+
+  if (!mongoose.Types.ObjectId.isValid(user._id)) {
+    throw new ApiError(400, "please provide a valid user id");
+  }
+
+  const filter = { publishedBy: user._id };
+
+  const [userPins, total] = await Promise.all([
+    Pin.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Pin.countDocuments(filter),
+  ]);
+
+  const totalPages = Math.ceil(total / limit);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      { page, limit, total, totalPages, items: userPins },
+      "Pins fetched successfully"
+    )
+  );
+});

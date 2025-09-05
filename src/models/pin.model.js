@@ -11,7 +11,8 @@ const pinSchema = new mongoose.Schema({
     publishedBy: {
         type : mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required : true
+        required : true,
+        index: true
     },
     tag : {
         type: String,
