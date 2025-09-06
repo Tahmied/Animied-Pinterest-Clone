@@ -46,6 +46,20 @@ async function checkLogin() {
     }
 }
 
+//show Profile details
+function showProfileDetails (name ='Loading..', desc ='loading', dp = './Images/userDpIcon.svg'){
+    const nameText = document.querySelector('.profile-name')
+    const descText = document.querySelector('.profile-bio')
+    const avatarImg = document.querySelector('.dp-img')
+    const smallDp = document.querySelector('.dp-small-img')
+
+    nameText.innerHTML = name
+    descText.innerHTML = desc
+    avatarImg.src = dp
+    smallDp.src = dp
+    avatarImg.classList.add('userProfileDp')
+}
+
 function waitForImages(images) {
     return Promise.all(
         Array.from(images).map(img => {
@@ -57,11 +71,14 @@ function waitForImages(images) {
     );
 }
 
-
 // loads initial pins and returns it
 async function getInitialPins(page = 1, limit = 10) {
     let res = await fetch(`/api/v1/pins/userPins?page=${page}&limit=${limit}`)
     let data = await res.json()
+
+    // update user profile details as well
+    showProfileDetails(data.data.userName, data.data.userDesc, data.data.userDp)
+    console.log(data.data)
     maxPages = data.data.totalPages
     let pins = data.data.pins
     pins.forEach((pin) => {

@@ -116,13 +116,20 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #00c2ff);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
         }
+
+        .dp-small-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
         /* Profile Header Styles */
         .profile-header {
             padding: 40px 20px;
@@ -133,20 +140,18 @@
             align-items: center;
             text-align: center;
         }
-        .profile-avatar {
+
+        .dp-img {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #00c2ff);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            font-weight: bold;
+            padding: 0;
             margin-bottom: 20px;
             box-shadow: 0 8px 30px rgba(6, 182, 212, 0.3);
+            object-fit: cover;
+            aspect-ratio: 1/1;
         }
+
         .profile-name {
             font-size: 32px;
             font-weight: 700;
@@ -346,7 +351,7 @@
                 text-align: left;
                 align-items: flex-start;
             }
-            .profile-avatar {
+            .dp-img {
                 margin-right: 30px;
                 margin-bottom: 0;
             }
@@ -557,3 +562,4 @@
  .upload-area p {
      color: var(--text-secondary);
 }
+

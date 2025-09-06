@@ -30,16 +30,16 @@ async function generateAccessTokenAndRefreshToken(userId){
 }
 
 export const registerUser = asyncHandler(async (req , res) => {
-    let {name , email, password} = req.body
+    let {name , email, password, desc} = req.body
     if([name,email,password].some((e)=>!e)){
         throw new ApiError(400 , 'all fields are required')
     }
     
-    let dpLocalPath = req.file ? `/dp/${req.file.filename}` : null
+    let dpLocalPath = req.file ? `/uploads/dp/${req.file.filename}` : null
 
     try {
         await User.create({
-            name , email, password, dpLocalPath
+            name , email, password, dpLocalPath, description : desc
         })
         return res.status(200).json(
             new ApiResponse(200 , [] , 'User registered successfully')
@@ -157,8 +157,4 @@ export const logOut = asyncHandler(async (req,res)=>{
     .json(
         new ApiResponse(200 , null , 'user logged out sucksexfully')
     )
-})
-
-export const userProfile = asyncHandler(async (req,res) => {
-    
 })
